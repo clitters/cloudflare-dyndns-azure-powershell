@@ -1,0 +1,38 @@
+name: Zip and Tag Azure Function Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  zip-and-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install standard-version
+        run: npm install -g standard-version
+
+      - name: Bump version and create changelog
+        run: standard-version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push version bump and tags
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git push --follow-tags origin main
+
+      - name: Zip Azure Function
+        run: |
+          cd src
+          zip -r ../function.zip .
