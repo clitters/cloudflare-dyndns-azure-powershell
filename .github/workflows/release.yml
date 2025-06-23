@@ -1,4 +1,4 @@
-name: Zip and Tag Azure Function Release
+name: Zip, Tag, and Release Azure Function
 
 on:
   push:
@@ -7,9 +7,9 @@ on:
 
 permissions:
   contents: write
-  
+
 jobs:
-  zip-and-tag:
+  zip-tag-release:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,10 +25,7 @@ jobs:
         run: npm install -g standard-version
 
       - name: Bump version and create changelog
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          standard-version
+        run: standard-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -42,3 +39,18 @@ jobs:
         run: |
           cd src
           zip -r ../function.zip .
+
+      - name: Get version
+        id: get_version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ steps.get_version.outputs.version }}"
+          name: "v${{ steps.get_version.outputs.version }}"
+          files: function.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
