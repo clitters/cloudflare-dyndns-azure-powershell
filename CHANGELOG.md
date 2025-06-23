@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.1.2 (2025-06-23)
+
+
+### Bug Fixes
+
+* added package.json ([9fbf191](https://github.com/clitters/cloudflare-dyndns-azure-powershell/commit/9fbf19132970d529de50f141dc84a5760f1fae7b))
+
 ### 1.0.1 (2025-06-23)
 
 

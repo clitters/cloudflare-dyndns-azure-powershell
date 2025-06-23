@@ -1,6 +1,6 @@
 {
   "name": "cloudflare-dyndns-azure-powershell",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Azure Function project for automated releases",
   "main": "src/UpdateDns/run.ps1",
   "scripts": {},
